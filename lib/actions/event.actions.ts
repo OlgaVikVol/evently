@@ -123,23 +123,23 @@ export async function getAllEvents({ query, limit = 6, page, category }: GetAllE
   }
 }
 
-//GET EVENTS BY ORGANIZER
+// GET EVENTS BY ORGANIZER
 export async function getEventsByUser({ userId, limit = 6, page }: GetEventsByUserParams) {
   try {
-    await connectToDatabase();
+    await connectToDatabase()
 
-    const conditions = { organizer: userId };
-    const skipAmount = (page - 1) * limit;
+    const conditions = { organizer: userId }
+    const skipAmount = (page - 1) * limit
 
     const eventsQuery = Event.find(conditions)
-      .sort({ createdAt: 'desc'})
+      .sort({ createdAt: 'desc' })
       .skip(skipAmount)
       .limit(limit)
 
-    const events = await populateEvent(eventsQuery);
-    const eventCount = await Event.countDocuments(conditions);
+    const events = await populateEvent(eventsQuery)
+    const eventsCount = await Event.countDocuments(conditions)
 
-    return { data: JSON.parse(JSON.stringify(events)), totalPages: Math.ceil(eventCount / limit)}
+    return { data: JSON.parse(JSON.stringify(events)), totalPages: Math.ceil(eventsCount / limit) }
   } catch (error) {
     handleError(error)
   }
@@ -153,10 +153,10 @@ export async function getRelatedEventsByCategory({
   page = 1,
 }: GetRelatedEventsByCategoryParams) {
   try {
-    await connectToDatabase();
+    await connectToDatabase()
 
-    const skipAmount = (Number(page) - 1) * limit;
-    const conditions = { $and: [{ category: categoryId }, { _id: { $ne: eventId } }]};
+    const skipAmount = (Number(page) - 1) * limit
+    const conditions = { $and: [{ category: categoryId }, { _id: { $ne: eventId } }] }
 
     const eventsQuery = Event.find(conditions)
       .sort({ createdAt: 'desc' })
