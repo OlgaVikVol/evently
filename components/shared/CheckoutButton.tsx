@@ -2,9 +2,10 @@
 
 import { IEvent } from '@/lib/database/models/event.model';
 import { SignedOut } from '@clerk/clerk-react';
-import { useUser } from '@clerk/nextjs';
+import { SignedIn, useUser } from '@clerk/nextjs';
 import { Button } from '../ui/button';
 import Link from 'next/link';
+import Checkout from './Checkout';
 
 const CheckoutButton = ({ event }: { event: IEvent}) => {
 	const { user } = useUser();
@@ -24,6 +25,10 @@ const CheckoutButton = ({ event }: { event: IEvent}) => {
 							</Link>
 						</Button>
 					</SignedOut>
+
+					<SignedIn>
+						<Checkout event={event} userId={userId}/>
+					</SignedIn>
 				</>
 			)}
 
